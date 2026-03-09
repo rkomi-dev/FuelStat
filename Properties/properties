@@ -1,0 +1,6 @@
+#configurazione database
+
+db.url=jdbc:mysql://localhost:3306/FuelStat
+db.username=user
+db.password=change123
+db.driver=com.mysql.cj.jdbc.Driver
