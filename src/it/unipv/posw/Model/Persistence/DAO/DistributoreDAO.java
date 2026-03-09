@@ -67,15 +67,15 @@ public class DistributoreDAO implements IDistributoreDAO {
 	@Override
 	public void caricaPrezziNelDB(String pathFile) {
 	    Connection conn = null;
-	    PreparedStatement pstmt = null;
+	    PreparedStatement ps = null;
 	    BufferedReader br = null;
 	    String sql = "INSERT INTO prezzi (id_impianto, tipo_carburante, prezzo, is_self, dt_comunicazione) " +
 	                 "VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE prezzo = VALUES(prezzo)";
 
 	    try {
 	        conn = DBConnection.getInstance().startConnection();
-	        conn.setAutoCommit(false); // Importante per le performance del batch
-	        pstmt = conn.prepareStatement(sql);
+	        conn.setAutoCommit(false); 
+	        ps = conn.prepareStatement(sql);
 	        br = new BufferedReader(new FileReader(pathFile));
 
 	        br.readLine(); // Salta "Estrazione del..."
@@ -87,16 +87,16 @@ public class DistributoreDAO implements IDistributoreDAO {
 	            String[] campi = riga.split("\\|"); // Escape per il carattere pipe
 	            if (campi.length < 5) continue;
 
-	            pstmt.setInt(1, Integer.parseInt(campi[0]));
-	            pstmt.setString(2, campi[1]);
-	            pstmt.setDouble(3, Double.parseDouble(campi[2]));
-	            pstmt.setInt(4, Integer.parseInt(campi[3]));
-	            pstmt.setString(5, convertiData(campi[4])); // Metodo di utilità per il formato MySQL
+	            ps.setInt(1, Integer.parseInt(campi[0]));
+	            ps.setString(2, campi[1]);
+	            ps.setDouble(3, Double.parseDouble(campi[2]));
+	            ps.setInt(4, Integer.parseInt(campi[3]));
+	            ps.setString(5, convertiData(campi[4])); // Metodo di utilità per il formato MySQL
 
-	            pstmt.addBatch();
-	            if (++count % 1000 == 0) pstmt.executeBatch();
+	            ps.addBatch();
+	            if (++count % 1000 == 0) ps.executeBatch();
 	        }
-	        pstmt.executeBatch();
+	        ps.executeBatch();
 	        conn.commit();
 	        System.out.println("Prezzi caricati correttamente!");
 
@@ -106,7 +106,7 @@ public class DistributoreDAO implements IDistributoreDAO {
 	    } finally {
 	        try {
 	            if (br != null) br.close();
-	            if (pstmt != null) pstmt.close();
+	            if (ps != null) ps.close();
 	            DBConnection.getInstance().closeConnection(conn);
 	        } catch (Exception e) { e.printStackTrace(); }
 	    }

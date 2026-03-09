@@ -16,7 +16,7 @@ public class DataDowloaderService {
             is = url.openStream();
             fos = new FileOutputStream(nomeFileDestinazione);
 
-            byte[] buffer = new byte[8192]; // Buffer da 8KB per velocità
+            byte[] buffer = new byte[8192];
             int byteLetti;
 
             System.out.println("Download in corso da: " + urlSorgente);
@@ -28,7 +28,6 @@ public class DataDowloaderService {
         } catch (IOException e) {
             System.err.println("Errore durante il download: " + e.getMessage());
         } finally {
-            // Chiusura manuale rigorosa
             try {
                 if (is != null) is.close();
                 if (fos != null) fos.close();

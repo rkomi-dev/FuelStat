@@ -19,9 +19,8 @@ public class FuelController {
     }
 
     public void avvia() {
-        view.mostraMessaggio("Benvenuto in FuelWise!");
+        view.mostraMessaggio("Benvenuto in FuelStat!");
 
-        // --- LOGICA DI AGGIORNAMENTO INTELLIGENTE ---
         File filePrezzi = new File("prezzi.csv");
         boolean deveAggiornare = false;
 
@@ -46,7 +45,6 @@ public class FuelController {
         if (deveAggiornare) {
             eseguiAggiornamentoTotale();
         }
-        // --------------------------------------------
 
         // 2. Ciclo di ricerca
         boolean continua = true;
@@ -63,7 +61,7 @@ public class FuelController {
             String risp = view.chiediInput("Vuoi fare un'altra ricerca? (S/N)");
             if (risp.equalsIgnoreCase("N")) continua = false;
         }
-        view.mostraMessaggio("Grazie per aver usato FuelWise. Arrivederci!");
+        view.mostraMessaggio("Grazie per aver usato FuelStat. Arrivederci!");
     }
 
     /**
