@@ -10,7 +10,7 @@
 
 ## Overview del Software
 
-FuelWise è un'applicazione Java progettata per il monitoraggio e l'analisi in tempo reale dei prezzi dei carburanti sul territorio italiano. Il sistema automatizza l'intero ciclo di vita del dato: dal recupero delle informazioni ufficiali fornite dal MIMIT (Ministero delle Imprese e del Made in Italy) alla loro elaborazione e persistenza su database relazionale.
+FuelStat è un'applicazione Java progettata per il monitoraggio e l'analisi in tempo reale dei prezzi dei carburanti sul territorio italiano. Il sistema automatizza l'intero ciclo di vita del dato: dal recupero delle informazioni ufficiali fornite dal MIMIT (Ministero delle Imprese e del Made in Italy) alla loro elaborazione e persistenza su database relazionale.
 
 L'obiettivo principale è fornire all'utente uno strumento da riga di comando (CLI) rapido ed efficiente per individuare i 10 distributori più economici in una specifica provincia, filtrando per tipologia di carburante
 
