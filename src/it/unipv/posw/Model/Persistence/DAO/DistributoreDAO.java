@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,7 +66,7 @@ public class DistributoreDAO implements IDistributoreDAO {
     }
 
 	@Override
-	public void caricaPrezziNelDB(String pathFile) {
+	public void caricaPrezzi(String pathFile) {
 	    Connection conn = null;
 	    PreparedStatement ps = null;
 	    BufferedReader br = null;
@@ -157,8 +158,8 @@ public class DistributoreDAO implements IDistributoreDAO {
 	
 	private String convertiData(String dataCsv) {
 	    try {
-	        java.text.SimpleDateFormat inputFormat = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-	        java.text.SimpleDateFormat outputFormat = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	        SimpleDateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+	        SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	        
 	        java.util.Date date = inputFormat.parse(dataCsv);
 	        return outputFormat.format(date);
@@ -174,6 +175,30 @@ public class DistributoreDAO implements IDistributoreDAO {
             if (cn != null) DBConnection.getInstance().closeConnection(cn);
         } catch (Exception e) { e.printStackTrace(); }
     }
+	
+	public void resetDB() {
+		
+		Statement st;
+		String query1 = "SET FOREIGN_KEY_CHECKS = 0";
+		String query2 = "TRUNCATE TABLE prezzi";
+		String query3 = "TRUNCATE TABLE impianti";
+		String query4 = "SET FOREIGN_KEY_CHECKS = 1";
+		
+		try {
+			c = DBConnection.getInstance().startConnection();
+			st = c.createStatement();
+			
+			st.executeUpdate(query1);
+			st.executeUpdate(query2);
+			st.executeUpdate(query3);
+			st.executeUpdate(query4);
+			
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}finally {
+			DBConnection.getInstance().closeConnection(c);
+		}
+	}
 }
 
 

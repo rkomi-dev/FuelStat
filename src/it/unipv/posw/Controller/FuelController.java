@@ -72,8 +72,10 @@ public class FuelController {
         downloader.scaricaFile("https://www.mimit.gov.it/images/exportCSV/anagrafica_impianti_attivi.csv", "anagrafica.csv");
         downloader.scaricaFile("https://www.mimit.gov.it/images/exportCSV/prezzo_alle_8.csv", "prezzi.csv");
         
+        dao.resetDB();
+        
         view.mostraMessaggio("Popolamento database (operazione lunga, attendere)...");
         dao.caricaAnagrafica("anagrafica.csv");
-        dao.caricaPrezziNelDB("prezzi.csv");
+        dao.caricaPrezzi("prezzi.csv");
     }
 }
