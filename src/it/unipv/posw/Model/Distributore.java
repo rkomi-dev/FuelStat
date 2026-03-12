@@ -1,5 +1,7 @@
 package it.unipv.posw.Model;
 
+import java.time.LocalDateTime;
+
 public class Distributore {
 	
 	    private int idImpianto;
@@ -10,8 +12,8 @@ public class Distributore {
 	    private String provincia;  
 	    private String tipoCarburante; 
 	    private double prezzo;        
-	    private boolean isSelf;       
-	    private String dataAggiornamento;
+	    private boolean isSelf;      
+	    private LocalDateTime dt_comunicazione;
 		/**
 		 * @param idImpianto
 		 * @param gestore
@@ -21,16 +23,17 @@ public class Distributore {
 		 * @param provincia
 		 * @param tipoCarburante
 		 * @param prezzo
+		 * @param dt_comunicazione 
 		 * @param isSelf
-		 * @param dataAggiornamento
 		 */
-		public Distributore(int idImpianto, String gestore, String bandiera, String provincia, double prezzo) {
+		public Distributore(int idImpianto, String gestore, String bandiera, String provincia, double prezzo, LocalDateTime dt_comunicazione) {
 			super();
 			this.idImpianto = idImpianto;
 			this.gestore = gestore;
 			this.bandiera = bandiera;
 			this.provincia = provincia;
 			this.prezzo = prezzo;
+			this.dt_comunicazione = dt_comunicazione;
 		}
 		
 		public int getIdImpianto() {
@@ -87,12 +90,16 @@ public class Distributore {
 		public void setSelf(boolean isSelf) {
 			this.isSelf = isSelf;
 		}
-		public String getDataAggiornamento() {
-			return dataAggiornamento;
+
+		public LocalDateTime getDt_comunicazione() {
+			return dt_comunicazione;
 		}
-		public void setDataAggiornamento(String dataAggiornamento) {
-			this.dataAggiornamento = dataAggiornamento;
-		} 
+
+		public void setDt_comunicazione(LocalDateTime dt_comunicazione) {
+			this.dt_comunicazione = dt_comunicazione;
+		}
+		
+		
 	    
 	    
 	}

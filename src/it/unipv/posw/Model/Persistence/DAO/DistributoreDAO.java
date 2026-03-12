@@ -9,7 +9,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import it.unipv.posw.Model.Distributore;
 import it.unipv.posw.Model.Persistence.DBConnection;
@@ -47,7 +49,8 @@ public class DistributoreDAO implements IDistributoreDAO {
                     rs.getString("gestore"),
                     rs.getString("bandiera"),
                     rs.getString("provincia"),
-                    rs.getDouble("prezzo")
+                    rs.getDouble("prezzo"),
+                    rs.getTimestamp("dt_comunicazione").toLocalDateTime()
                 );
                 
                 d.setComune(rs.getString("comune"));
@@ -70,46 +73,65 @@ public class DistributoreDAO implements IDistributoreDAO {
 	    Connection conn = null;
 	    PreparedStatement ps = null;
 	    BufferedReader br = null;
-	    String sql = "INSERT INTO prezzi (id_impianto, tipo_carburante, prezzo, is_self, dt_comunicazione) " +
-	                 "VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE prezzo = VALUES(prezzo)";
+	    
+	    // Mappa per filtrare i record: Chiave = "ID_TIPO" | Valore = Array di stringhe (la riga del CSV)
+	    Map<String, String[]> mappaMigliori = new HashMap<>();
 
 	    try {
-	        conn = DBConnection.getInstance().startConnection();
-	        conn.setAutoCommit(false); 
-	        ps = conn.prepareStatement(sql);
 	        br = new BufferedReader(new FileReader(pathFile));
-
 	        br.readLine(); // Salta "Estrazione del..."
-	        br.readLine(); // Salta l'intestazione
+	        br.readLine(); // Salta intestazione
 
 	        String riga;
-	        int count = 0;
 	        while ((riga = br.readLine()) != null) {
-	            String[] campi = riga.split("\\|"); // Escape per il carattere pipe
+	            String[] campi = riga.split("\\|");
 	            if (campi.length < 5) continue;
 
-	            ps.setInt(1, Integer.parseInt(campi[0]));
-	            ps.setString(2, campi[1]);
-	            ps.setDouble(3, Double.parseDouble(campi[2]));
-	            ps.setInt(4, Integer.parseInt(campi[3]));
-	            ps.setString(5, convertiData(campi[4])); // Metodo di utilità per il formato MySQL
+	            String idImpianto = campi[0];
+	            String tipoCarb = campi[1];
+	            String dataCorrente = convertiData(campi[4]); // Formato yyyy-MM-dd HH:mm:ss
+	            
+	            // Creiamo una chiave univoca per l'impianto e il prodotto
+	            String chiaveUnivoca = idImpianto + "_" + tipoCarb;
+
+	            // Logica di filtraggio:
+	            // Se la combinazione non esiste OPPURE la data di questa riga è più recente di quella salvata
+	            if (!mappaMigliori.containsKey(chiaveUnivoca) || 
+	                dataCorrente.compareTo(mappaMigliori.get(chiaveUnivoca)[4]) > 0) {
+	                
+	                // Aggiorniamo la data formattata nel campo per l'inserimento successivo
+	                campi[4] = dataCorrente; 
+	                mappaMigliori.put(chiaveUnivoca, campi);
+	            }
+	        }
+
+	        // Ora che abbiamo solo i record più recenti nella Map, scriviamo nel DB
+	        String sql = "INSERT INTO prezzi (id_impianto, tipo_carburante, prezzo, is_self, dt_comunicazione) VALUES (?, ?, ?, ?, ?)";
+	        conn = DBConnection.getInstance().startConnection();
+	        conn.setAutoCommit(false);
+	        ps = conn.prepareStatement(sql);
+
+	        int count = 0;
+	        for (String[] dati : mappaMigliori.values()) {
+	            ps.setInt(1, Integer.parseInt(dati[0]));
+	            ps.setString(2, dati[1]);
+	            ps.setDouble(3, Double.parseDouble(dati[2]));
+	            ps.setInt(4, Integer.parseInt(dati[3]));
+	            ps.setString(5, dati[4]); // Data già convertita nel ciclo precedente
 
 	            ps.addBatch();
 	            if (++count % 1000 == 0) ps.executeBatch();
 	        }
+	        
 	        ps.executeBatch();
 	        conn.commit();
-	        System.out.println("Prezzi caricati correttamente!");
+	        System.out.println("Caricamento completato: " + count + " prezzi unici inseriti.");
 
 	    } catch (Exception e) {
 	        try { if (conn != null) conn.rollback(); } catch (SQLException se) { se.printStackTrace(); }
 	        e.printStackTrace();
 	    } finally {
-	        try {
-	            if (br != null) br.close();
-	            if (ps != null) ps.close();
-	            DBConnection.getInstance().closeConnection(conn);
-	        } catch (Exception e) { e.printStackTrace(); }
+	        chiudiRisorse(br, ps, conn);
 	    }
 	}
 	

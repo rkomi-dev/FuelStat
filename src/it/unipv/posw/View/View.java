@@ -28,11 +28,11 @@ public class View {
             return;
         }
         System.out.println("\n--- TOP 10 PIU' ECONOMICI ---");
-        System.out.printf("%-20s | %-15s | %-10s | %s\n", "BANDIERA", "COMUNE", "PREZZO", "GESTORE");
-        System.out.println("---------------------------------------------------------------");
+        System.out.printf("%-30s | %-30s | %-8s | %-40s | %s\n", "BANDIERA", "COMUNE", "PREZZO", "GESTORE", "ULTIMO AGGIORNAMENTO");
+        System.out.println("---------------------------------------------------------------------------------------------------------------------------------------------");
         for (Distributore d : lista) {
-            System.out.printf("%-20s | %-15s | %6.3f € | %s\n", 
-                d.getBandiera(), d.getComune(), d.getPrezzo(), d.getGestore());
+            System.out.printf("%-30s | %-30s | %6.3f € | %-40s | %s\n" , 
+                d.getBandiera(), d.getComune(), d.getPrezzo(), d.getGestore(), d.getDt_comunicazione());
         }
         System.out.println();
     }
