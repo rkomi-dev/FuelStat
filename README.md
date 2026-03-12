@@ -26,7 +26,7 @@ Per far eseguire il sotware in locale bisogna disporre di:
 
 * **Clonare la repository**
 ```bash
-https://github.com/rkomi-dev/FuelStat.git
+git clone https://github.com/rkomi-dev/FuelStat.git
 ```
 * **Creare il database**
 1. Spostati nella cartella clonata
