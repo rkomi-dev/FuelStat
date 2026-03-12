@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS prezzi (
     id_prezzo INT AUTO_INCREMENT PRIMARY KEY,
     id_impianto INT,
     tipo_carburante VARCHAR(50),   
-    prezzo DECIMAL(5, 3),           
+    prezzo DECIMAL(10, 3),           
     is_self TINYINT(1),            
     dt_comunicazione DATETIME,      
     FOREIGN KEY (id_impianto) REFERENCES impianti(id_impianto) ON DELETE CASCADE

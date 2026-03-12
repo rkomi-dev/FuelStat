@@ -42,6 +42,7 @@ public class FuelController {
             }
         }
 
+       
         if (deveAggiornare) {
             eseguiAggiornamentoTotale();
         }
