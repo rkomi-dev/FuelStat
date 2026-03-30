@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS impianti (
     nome_impianto VARCHAR(255),       
     indirizzo VARCHAR(255),
     comune VARCHAR(100),
-    provincia CHAR(2),              
+    provincia VARCHAR(50),              
     latitudine DECIMAL(10, 8),
     longitudine DECIMAL(11, 8)
 );
