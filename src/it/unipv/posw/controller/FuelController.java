@@ -1,21 +1,22 @@
-package it.unipv.posw.Controller;
+package it.unipv.posw.controller;
 
-import it.unipv.posw.Model.Service.DataDowloaderService;
-import it.unipv.posw.Model.Persistence.DAO.DistributoreDAO;
-import it.unipv.posw.View.View;
-import it.unipv.posw.Model.Distributore;
+import it.unipv.posw.model.entities.Distributore;
+import it.unipv.posw.model.gestori.Gestore;
+import it.unipv.posw.view.View;
+
 import java.io.File;
 import java.util.List;
 
 public class FuelController {
-    private DistributoreDAO dao;
+	
+    private Gestore model;
     private View view;
-    private DataDowloaderService downloader;
 
-    public FuelController(DistributoreDAO dao, View view) {
-        this.dao = dao;
+
+    public FuelController(Gestore model, View view) {
+        this.model = model;
         this.view = view;
-        this.downloader = new DataDowloaderService();
+
     }
 
     public void avvia() {
@@ -56,7 +57,7 @@ public class FuelController {
             // Normalizzazione minima dell'input per evitare errori di battitura
             if(carb.equalsIgnoreCase("diesel")) carb = "Gasolio";
 
-            List<Distributore> risultati = dao.getTop10ByProvincia(prov, carb);
+            List<Distributore> risultati = model.getDao().getTop10ByProvincia(prov, carb);
             view.stampaClassifica(risultati);
             
             String risp = view.chiediInput("Vuoi fare un'altra ricerca? (S/N)");
@@ -70,13 +71,13 @@ public class FuelController {
      */
     private void eseguiAggiornamentoTotale() {
         view.mostraMessaggio("Download in corso dal sito MIMIT...");
-        downloader.scaricaFile("https://www.mimit.gov.it/images/exportCSV/anagrafica_impianti_attivi.csv", "anagrafica.csv");
-        downloader.scaricaFile("https://www.mimit.gov.it/images/exportCSV/prezzo_alle_8.csv", "prezzi.csv");
+        model.getService().scaricaFile("https://www.mimit.gov.it/images/exportCSV/anagrafica_impianti_attivi.csv", "anagrafica.csv");
+        model.getService().scaricaFile("https://www.mimit.gov.it/images/exportCSV/prezzo_alle_8.csv", "prezzi.csv");
         
-        dao.resetDB();
+        model.getDao().resetDB();
         
         view.mostraMessaggio("Popolamento database (operazione lunga, attendere)...");
-        dao.caricaAnagrafica("anagrafica.csv");
-        dao.caricaPrezzi("prezzi.csv");
+        model.getDao().caricaAnagrafica("anagrafica.csv");
+        model.getDao().caricaPrezzi("prezzi.csv");
     }
 }

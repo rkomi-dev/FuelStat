@@ -1,4 +1,4 @@
-package it.unipv.posw.Model.Persistence;
+package it.unipv.posw.model.persistence;
 
 import java.io.FileInputStream;
 
@@ -24,7 +24,7 @@ public class DBConnection {
     private DBConnection() {
     	Properties p = new Properties(System.getProperties());
         try {
-            p.load(new FileInputStream("Properties/properties"));
+            p.load(new FileInputStream("properties/properties"));
             username = p.getProperty(PROPERTYNAME);
             password = p.getProperty(PROPERTYPSW);
             dbDriver = p.getProperty(PROPERTYDBDRIVER);

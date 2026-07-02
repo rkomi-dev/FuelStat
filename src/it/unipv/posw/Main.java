@@ -1,8 +1,8 @@
 package it.unipv.posw;
 
-import it.unipv.posw.Controller.FuelController;
-import it.unipv.posw.Model.Persistence.DAO.DistributoreDAO;
-import it.unipv.posw.View.View;
+import it.unipv.posw.controller.FuelController;
+import it.unipv.posw.model.persistence.dao.DistributoreDAO;
+import it.unipv.posw.view.View;
 
 public class Main {
 	

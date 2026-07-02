@@ -1,8 +1,8 @@
-package it.unipv.posw.Model.Persistence.DAO.Interface;
+package it.unipv.posw.model.persistence.dao.interfaces;
 
 import java.util.List;
 
-import it.unipv.posw.Model.Distributore;
+import it.unipv.posw.model.entities.Distributore;
 
 public interface IDistributoreDAO {
 	

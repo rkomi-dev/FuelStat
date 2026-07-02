@@ -1,4 +1,4 @@
-package it.unipv.posw.Model.Service;
+package it.unipv.posw.model.service;
 
 import java.io.FileOutputStream;
 import java.io.IOException;

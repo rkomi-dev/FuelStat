@@ -1,4 +1,4 @@
-package it.unipv.posw.Model.Persistence.DAO;
+package it.unipv.posw.model.persistence.dao;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -13,9 +13,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import it.unipv.posw.Model.Distributore;
-import it.unipv.posw.Model.Persistence.DBConnection;
-import it.unipv.posw.Model.Persistence.DAO.Interface.IDistributoreDAO;
+import it.unipv.posw.model.entities.Distributore;
+import it.unipv.posw.model.persistence.DBConnection;
+import it.unipv.posw.model.persistence.dao.interfaces.IDistributoreDAO;
 
 public class DistributoreDAO implements IDistributoreDAO {
 	

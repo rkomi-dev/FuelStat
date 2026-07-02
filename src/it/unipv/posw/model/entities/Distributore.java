@@ -1,4 +1,4 @@
-package it.unipv.posw.Model;
+package it.unipv.posw.model.entities;
 
 import java.time.LocalDateTime;
 

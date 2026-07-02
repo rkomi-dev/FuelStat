@@ -1,9 +1,9 @@
-package it.unipv.posw.View;
+package it.unipv.posw.view;
 
 import java.util.List;
 import java.util.Scanner;
 
-import it.unipv.posw.Model.Distributore;
+import it.unipv.posw.model.entities.Distributore;
 
 public class View {
 	
